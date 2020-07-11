@@ -1,0 +1,57 @@
+{
+  "name": "fullstack_final",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "repository": "",
+  "author": "Lyubomir Vaklinov",
+  "license": "Apache-2.0",
+  "private": false,
+  "scripts": {
+    "server": "node --inspect=5858 -r ts-node/register ./src/server.ts",
+    "tsc": "tsc -w",
+    "start": "nodemon",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "core-util-is": "^1.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.20",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.6",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongoose": "^5.7.29",
+    "@types/node": "^14.0.14",
+    "@types/react-redux": "^7.1.9",
+    "@types/react-router-dom": "^5.1.5",
+    "@types/redux": "^3.6.0",
+    "@types/redux-persist": "^4.3.1",
+    "eslint": "^7.3.1",
+    "eslint-plugin-import": "^2.22.0",
+    "nodemon": "^2.0.4",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      ".git",
+      "node_modules"
+    ],
+    "watch": [
+      "src"
+    ],
+    "exec": "npm run server",
+    "ext": "ts"
+  }
+}
