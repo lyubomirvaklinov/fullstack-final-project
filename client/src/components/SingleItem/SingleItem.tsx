@@ -57,7 +57,7 @@ export default function SingleItem({
   ) : error ? (
     <div>{error}</div>
   ) : (
-    <Grid item style={{ minWidth: 400 }}>
+    <Grid item style={{ minWidth: 400, minHeight: 600 }}>
       <div>
         <Paper className={classes.control}>
           {/* style={{backgroundColor: 'transparent'}} */}
@@ -73,8 +73,12 @@ export default function SingleItem({
             </Box>
             <Divider />{' '}
             <div className="product-name">
+              { item.itemsInStock && item.itemsInStock > 0 ?
               <Link to={`${match.url}/${item._id}`}>{item.itemName}</Link>
-            </div>
+              :
+              <div>Out Of Stock!</div>
+              }
+              </div>
             <div className="product-description">{item.description}</div>
             <div className="product-price">{item.price} lv.</div>
             <div className="product-rating">4.5 Stars (10 Reviews)</div>

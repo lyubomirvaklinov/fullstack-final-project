@@ -5,8 +5,9 @@ export interface CartPayload {
   itemName: string;
   description: string;
   price: number;
-  size: string;
   imageUrl: string;
+  category: string;
+  size: string[];
   itemsInStock: number;
   qty: number;
 }

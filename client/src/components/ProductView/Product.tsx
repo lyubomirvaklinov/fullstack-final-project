@@ -6,10 +6,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useHistory } from 'react-router-dom';
 import { detailsItem } from '../../actions/itemActions';
 import { ReduxState, IdType } from '../../shared/shared-types';
+import { Box } from '@material-ui/core';
 
-interface Props {
-  
-}
+interface Props {}
 
 interface ProductParams {
   id: IdType;
@@ -23,10 +22,11 @@ export default function Product({}: Props): ReactElement {
     itemName,
     description,
     price,
-    size,
+    // size,
     imageUrl,
     itemsInStock,
   } = result;
+  console.log(itemDetails)
 
   const dispatch = useDispatch();
 
@@ -38,8 +38,8 @@ export default function Product({}: Props): ReactElement {
   ) : error ? (
     <div>{error}</div>
   ) : (
-    <div>
-      <Grid container spacing={1} style={{maxWidth: 1100, margin: '0 auto'}}>
+    <Box m={5}>
+      <Grid container spacing={1} style={{ maxWidth: 1100, margin: '0 auto' }}>
         <Grid item sm={5}>
           <Image image={imageUrl} />
         </Grid>
@@ -47,6 +47,6 @@ export default function Product({}: Props): ReactElement {
           <Info info={result} id={id} />
         </Grid>
       </Grid>
-    </div>
-  )
-};
+    </Box>
+  );
+}

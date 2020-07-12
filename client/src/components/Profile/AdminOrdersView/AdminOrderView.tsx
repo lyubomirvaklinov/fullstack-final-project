@@ -24,6 +24,7 @@ import {
   deleteOrder,
 } from '../../../actions/orderActions';
 import { OrderItem, OrderCreate } from '../../../shared/orderTypes';
+import moment from 'moment';
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -123,78 +124,95 @@ export default function AdminOrderView({}: Props): ReactElement {
       <h1>There Are No Active Orders</h1>
     </Box>
   ) : (
-    <Grid
-      container
-      spacing={1}
-      direction="column"
-      style={{ maxWidth: 1500, margin: '0 auto' }}
-    >
-      <Box display="flex" flexDirection="column" flexWrap="wrap" p={10} mt={10}>
-        <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>Order ID</StyledTableCell>
-                <StyledTableCell>User ID</StyledTableCell>
-                <StyledTableCell align="right">Total Price</StyledTableCell>
-                <StyledTableCell align="right">Created At</StyledTableCell>
-                <StyledTableCell align="right">Status</StyledTableCell>
-                <StyledTableCell align="right">Requests</StyledTableCell>
-                <StyledTableCell align="right">Approve/Remove</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows?.sort((a, b) => {
-                return (a.isCancelled === b.isCancelled)? 0 : a.isCancelled? -1 : 1;
-              }).map((row) => (
-                <StyledTableRow key={row._id}>
-                  <StyledTableCell component="th" scope="row">
-                    {row._id}
+      <Grid item xs={12} style={{ maxWidth: 1500, margin: '0 auto' }}>
+        <Box
+          display="flex"
+          flexDirection="column"
+          flexWrap="wrap"
+          p={10}
+          mt={10}
+        >
+          <TableContainer component={Paper}>
+            <Table className={classes.table} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Order ID</StyledTableCell>
+                  <StyledTableCell>User ID</StyledTableCell>
+                  <StyledTableCell align="center">Total Price</StyledTableCell>
+                  <StyledTableCell align="center">Created At</StyledTableCell>
+                  <StyledTableCell align="center">Delivery:</StyledTableCell>
+                  <StyledTableCell align="center">Requests:</StyledTableCell>
+                  <StyledTableCell align="center">
+                    Approve/Remove
                   </StyledTableCell>
-                  <StyledTableCell align="right">{row.user}</StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.totalPrice} lv
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.createdAt.toString()}
-                  </StyledTableCell>
-                  {row.isDelivered ? (
-                    <StyledTableCell align="right">On The Way!</StyledTableCell>
-                  ) : (
-                    <StyledTableCell align="right">Pending</StyledTableCell>
-                  )}
-                  {row.isCancelled ? (
-                    <StyledTableCell align="right">
-                      Please Cancel My Order!
-                    </StyledTableCell>
-                  ) : (
-                    <StyledTableCell align="right">All Good!</StyledTableCell>
-                  )}
-                  <StyledTableCell>
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <CheckIcon
-                        style={{ marginTop: '15' }}
-                        onClick={() => {
-                          dispatch(updateOrder(row));
-                        }}
-                      />
-                      <DeleteIcon
-                        style={{ marginTop: '15' }}
-                        onClick={() => dispatch(deleteOrder(row._id))}
-                      />
-                    </Box>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </Grid>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows
+                  ?.sort((a, b) => {
+                    return a.isCancelled === b.isCancelled
+                      ? 0
+                      : a.isCancelled
+                      ? -1
+                      : 1;
+                  })
+                  .map((row) => (
+                    <StyledTableRow key={row._id}>
+                      <StyledTableCell component="th" scope="row">
+                        {row._id}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.user}
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {row.totalPrice} lv
+                      </StyledTableCell>
+                      <StyledTableCell align="right">
+                        {moment(row.createdAt.toString()).format(
+                          'MMMM Do YYYY, h:mm:ss a'
+                        )}
+                      </StyledTableCell>
+                      {row.isDelivered ? (
+                        <StyledTableCell align="right">
+                          On The Way!
+                        </StyledTableCell>
+                      ) : (
+                        <StyledTableCell align="right">Pending</StyledTableCell>
+                      )}
+                      {row.isCancelled ? (
+                        <StyledTableCell align="right">
+                          Please Cancel My Order!
+                        </StyledTableCell>
+                      ) : (
+                        <StyledTableCell align="right">
+                          All Good!
+                        </StyledTableCell>
+                      )}
+                      <StyledTableCell>
+                        <Box
+                          display="flex"
+                          flexDirection="column"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          <CheckIcon
+                            style={{ marginTop: '15' }}
+                            onClick={() => {
+                              dispatch(updateOrder(row));
+                            }}
+                          />
+                          <DeleteIcon
+                            style={{ marginTop: '15' }}
+                            onClick={() => dispatch(deleteOrder(row._id))}
+                          />
+                        </Box>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Grid>
   );
 }

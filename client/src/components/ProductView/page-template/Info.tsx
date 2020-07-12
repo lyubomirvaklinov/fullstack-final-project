@@ -15,18 +15,18 @@ import { IdType } from '../../../shared/shared-types';
 
 interface Props {
   info: Item;
-  id: IdType
+  id: IdType;
 }
 
 export default function Info({ info, id }: Props): ReactElement {
-  const { itemName, description, price, size, imageUrl, itemsInStock } = info;
+  const { itemName, description, price, category, size, itemsInStock } = info;
   const dispatch = useDispatch();
   const history = useHistory();
   const [qty, setQty] = useState(1);
 
   const handleChange = (e: any) => {
     setQty(+e.target.value);
-  }
+  };
 
   const handleAddToCart = () => {
     history.push(`/cart/${id}?qty=${qty}`);
@@ -34,29 +34,42 @@ export default function Info({ info, id }: Props): ReactElement {
 
   return (
     <Grid container direction="column" style={{ height: '100%' }}>
-      <Typography variant="subtitle1">Category</Typography>
+      <Typography variant="h6">{category} Clothing </Typography>
       <Divider />
-      <Box mt={2}>
-        <Typography variant="h4">{itemName}</Typography>
-        <Typography variant="subtitle1">{description}</Typography>
-        <Typography variant="h6">{price} lv.</Typography>
-        <Typography variant="subtitle1">Qty:</Typography>
-        <select
-          // labelId="demo-simple-select-label"
-          // id="demo-simple-select"
-          value={qty}
-          onChange={handleChange}
-        >
-          {itemsInStock && [...Array(+itemsInStock).keys()].map((x) => (
-            <option key={x + 1} value={x + 1}>
-              {x + 1}
-            </option>
-          ))}
-        </select>
+      <Box m={2} p={3}>
+        <Typography variant="h6">Item:</Typography>
+        <div>{itemName} </div>
+        <Typography variant="h6">Description:</Typography>
+        <div>{description} </div>
+        <Typography variant="h6">Price:</Typography>
+        <div>{price} lv.</div>
+        <Typography variant="h6">Qty:</Typography>
+        {itemsInStock && itemsInStock > 0 ? (
+          <select value={qty} onChange={handleChange}>
+            {itemsInStock &&
+              [...Array(+itemsInStock).keys()].map((x) => (
+                <option key={x + 1} value={x + 1}>
+                  {x + 1}
+                </option>
+              ))}
+          </select>
+        ) : (
+          <Box m={3}>
+          <Typography variant="h4">Out Of Stock!</Typography>
+          </Box>
+        )}
+        <Box mt={2}>
+          {itemsInStock && itemsInStock > 0 && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddToCart}
+            >
+              Purchase
+            </Button>
+          )}
+        </Box>
       </Box>
-      <Button variant="contained" color="primary" style={{ marginTop: 'auto' }} onClick={handleAddToCart}>
-        Purchase
-      </Button>
     </Grid>
   );
 }

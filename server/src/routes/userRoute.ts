@@ -6,7 +6,6 @@ import * as dotenv from 'dotenv';
 import config from '../config';
 import { UserType, VerifyToken } from '../types/User';
 import { auth, isAdmin } from '../middleware/auth';
-import getToken from '../../util';
 
 const router = express.Router();
 

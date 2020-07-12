@@ -2,6 +2,8 @@ import { Item, SingleItemType } from '../model/items-model';
 import { AddToCartReducerState } from './cartTypes';
 import { LogInUserType, UserListActions } from './userType';
 import { OrderDetails, Order, OrderCreate } from './orderTypes';
+import { Dispatch } from 'redux';
+import { SetStateAction } from 'react';
 
 export type IdType = string;
 
@@ -15,10 +17,19 @@ export interface ItemListener {
   (item: SingleItemType): void;
 }
 
+export interface Filter {
+  category: string;
+  price: string;
+}
+
 export interface ItemListProps {
   items: SingleItemType[];
   loading: boolean | undefined;
   error: string | undefined;
+  filter: Filter;
+  setFilter: any;
+  filterState: boolean;
+  setFilterState: any;
 }
 
 export interface ItemListActions {
@@ -54,10 +65,10 @@ export interface SaveItemRequest {
   itemName: string;
   description: string;
   price: number;
-  size: string;
   imageUrl: string;
+  category: string;
+  size: string[];
   itemsInStock?: number;
-  rating?: number;
   numReviews?: number;
 }
 

@@ -1,26 +1,46 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@material-ui/core/Box';
-import { Button, Grid, MenuItem } from '@material-ui/core';
-import { Formik, Form, Field } from 'formik';
+import {
+  Button,
+  Grid,
+  MenuItem,
+  Radio,
+  FormControlLabel,
+  Checkbox,
+} from '@material-ui/core';
+import { Formik, Form, Field, useField, FieldAttributes } from 'formik';
 import useStyles from '../styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveItem, updateItem } from '../../../actions/itemActions';
-import { IdType } from '../../../shared/shared-types';
+import { IdType, ReduxState } from '../../../shared/shared-types';
 import { AppState } from '../../../store';
 import { SingleItemType } from '../../../model/items-model';
 import { useHistory, useParams } from 'react-router-dom';
-import { TextField  } from 'formik-material-ui';
-import { string, object, number } from 'yup';
+import { TextField } from 'formik-material-ui';
+import { string, object, number} from 'yup';
+
+type MyRadioProps = { label: string } & FieldAttributes<{}>;
+
+export const MyRadio: React.FC<MyRadioProps> = ({ label, ...props }) => {
+  const [field] = useField<{}>(props);
+  return <FormControlLabel {...field} control={<Radio />} label={label} />;
+};
+type MyCheckBoxProps = { label: string } & FieldAttributes<{}>;
+
+const MyCheckBox: React.FC<MyCheckBoxProps> = ({ label, ...props }) => {
+  const [field] = useField<{}>(props);
+  return <FormControlLabel {...field} control={<Checkbox />} label={label} />;
+};
 
 interface newItem {
   _id: IdType;
   itemName: string;
   description: string;
   price: string;
-  size: string;
   imageUrl: string;
   itemsInStock: string;
-  rating: string;
+  category: string;
+  size: string[];
   numReviews: string;
 }
 
@@ -51,10 +71,10 @@ export const ManageItems: React.FC<Props> = () => {
     itemName: item?.itemName || '',
     description: item?.description || '',
     price: item?.price.toString() || '',
-    size: item?.size || '',
     imageUrl: item?.imageUrl || '',
     itemsInStock: item?.itemsInStock?.toString() || '',
-    rating: item?.rating?.toString() || '',
+    category: item?.category || '',
+    size: item?.size || [],
     numReviews: item?.numReviews?.toString() || '',
   };
   return (
@@ -64,24 +84,23 @@ export const ManageItems: React.FC<Props> = () => {
         itemName: string().required(),
         description: string().required(),
         price: number().required(),
-        size: string().required(),
         imageUrl: string().url().required(),
         itemsInStock: number().required(),
       })}
       onSubmit={(values) => {
-        // dispatch(loggingAction(email, password));
         const result = {
           _id: values._id,
           itemName: values.itemName,
           description: values.description,
           price: +values.price,
-          size: values.size,
           imageUrl: values.imageUrl,
           itemsInStock: +values.itemsInStock,
-          rating: +values.rating,
+          category: values.category,
+          size: values.size,
           numReviews: +values.numReviews,
         };
         if (result._id === '') {
+          
           dispatch(saveItem(result));
         } else {
           dispatch(updateItem(result));
@@ -97,20 +116,20 @@ export const ManageItems: React.FC<Props> = () => {
             </Box>
             <div>
               <Field
-                fullWidth
                 name="itemName"
                 component={TextField}
                 label="Enter Item Title"
                 onChange={handleChange}
+                style={{ width: 250 }}
               />
             </div>
             <div>
               <Field
-                fullWidth
                 name="description"
                 component={TextField}
                 label="Enter Description"
                 onChange={handleChange}
+                style={{ width: 250 }}
               />
             </div>
             <div>
@@ -123,16 +142,6 @@ export const ManageItems: React.FC<Props> = () => {
                 style={{ width: 250 }}
               />
             </div>
-            {/* <div>
-              <Field
-                fullWidth
-                name="size"
-                value={values.size}
-                component={TextField}
-                label="Available Size"
-                onChange={handleChange}
-              />
-            </div> */}
             <div>
               <Field
                 fullWidth
@@ -140,17 +149,45 @@ export const ManageItems: React.FC<Props> = () => {
                 component={TextField}
                 label="Image URL"
                 onChange={handleChange}
+                style={{ maxWidth: 250 }}
               />
             </div>
             <div>
               <Field
-                fullWidth
                 name="itemsInStock"
                 component={TextField}
                 label="Items Available"
                 onChange={handleChange}
                 style={{ width: 250 }}
               />
+            </div>
+            <div>
+              <Box m={1}>
+                <h4>Category:</h4>
+                <MyRadio
+                  name="category"
+                  type="radio"
+                  value="Male"
+                  label="Male"
+                  onChange={handleChange}
+                />
+                <MyRadio
+                  name="category"
+                  type="radio"
+                  value="Female"
+                  label="Female"
+                  onChange={handleChange}
+                />
+              </Box>
+            </div>
+            <div>
+              <h4>Available Sizes: </h4>
+              <Box display="flex" justifyContent="flex-start" flexWrap="wrap" >
+                <MyCheckBox name="size" type="checkbox" value="S" label="S" onChange={handleChange}/>
+                <MyCheckBox name="size" type="checkbox" value="M" label="M"  onChange={handleChange}/>
+                <MyCheckBox name="size" type="checkbox" value="L" label="L"  onChange={handleChange}/>
+                <MyCheckBox name="size" type="checkbox" value="XL" label="XL"  onChange={handleChange}/>
+              </Box>
             </div>
 
             <Box display="flex" justifyContent="center" margin="25px">

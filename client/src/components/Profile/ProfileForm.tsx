@@ -43,7 +43,7 @@ export default function ProfileForm({}: Props): ReactElement {
   const userUpdate: UserActions = useSelector(
     (state: ReduxState) => state.userUpdate
   );
-console.log(userUpdate)
+
   const { success } = userUpdate;
   const { userInfo } = userLoggedIn;
 
@@ -64,12 +64,8 @@ console.log(userUpdate)
     dispatch(updateUser());
   }, []);
 
-  const handleEdit = () => {
-    setEdit(true);
-  };
-
-  const handleCancel = () => {
-    setEdit(false);
+  const handleEditToggle = () => {
+    setEdit(!edit);
   };
 
   return !edit ? (
@@ -131,7 +127,7 @@ console.log(userUpdate)
           variant="contained"
           color="primary"
           style={{ marginTop: 'auto' }}
-          onClick={handleEdit}
+          onClick={handleEditToggle}
         >
           Edit
         </Button>
@@ -184,7 +180,7 @@ console.log(userUpdate)
                 <Button className="btn" type="submit">
                   Edit
                 </Button>
-                <Button className="btn" type="submit" onClick={handleCancel}>
+                <Button className="btn" type="submit" onClick={handleEditToggle}>
                   Cancel
                 </Button>
               </Box>

@@ -68,21 +68,30 @@ const App: React.FC = () => {
     (state: ReduxState) => state.userLogging
   );
 
+  const orderDetails: any = useSelector(
+    (state: ReduxState) => state.orderDetails
+  );
+  
+  const [filter, setFilter] = useState({
+    category: 'All',
+    price: '',
+  });
+
+  const [filterState, setFilterState] = useState(false);
+
   const { userInfo } = userLogging;
 
+  const detailsState = localStorage.getItem('order-details');
+
   useEffect(() => {
-    if (
-      editItemSuccess.success ||
-      saveItemSuccess.success ||
-      itemDeleteSuccess.success
-    ) {
-      dispatch(listItems());
-    }
+    console.log(detailsState)
     dispatch(listItems());
   }, [
     editItemSuccess.success,
     saveItemSuccess.success,
     itemDeleteSuccess.success,
+    orderDetails,
+    detailsState,
   ]);
 
   const { loading, result, error } = itemsList;
@@ -92,6 +101,11 @@ const App: React.FC = () => {
 
   const handleLogOut = () => {
     dispatch(loggingAction());
+    setFilter({
+      category: 'All',
+      price: '',
+    })
+    setFilterState(false);
   };
 
   const handleDrawerClose = () => {
@@ -107,7 +121,7 @@ const App: React.FC = () => {
         {/* style={{ background: '#2E3B55' }} */}
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            <MenuIcon onClick={handleDrawerOpen} />
+            {!detailsState && <MenuIcon onClick={handleDrawerOpen} />}
           </Typography>
           <Drawer
             style={{ width: '220px' }}
@@ -174,13 +188,17 @@ const App: React.FC = () => {
             </List>
           </Drawer>
 
-          {userInfo ? (
+          {userInfo && !detailsState  ? (
             <Link to="/profile" className="link">
               <Button color="inherit" className="link">
-                {userInfo.user.isAdmin ? <SupervisorAccountIcon /> :  <AccountCircleIcon />}
+                {userInfo.user.isAdmin ? (
+                  <SupervisorAccountIcon />
+                ) : (
+                  <AccountCircleIcon />
+                )}
               </Button>
             </Link>
-          ) : (
+          ) : !detailsState &&(
             <Link to="/login" className="link">
               <Button color="inherit" className="link">
                 Login
@@ -188,26 +206,26 @@ const App: React.FC = () => {
             </Link>
           )}
 
-          {userInfo ? (
+          {userInfo && !detailsState ? (
             <Link to="/items" className="link">
               <Button color="inherit" onClick={handleLogOut}>
                 Log Out
               </Button>
             </Link>
-          ) : (
+          ) : !detailsState && (
             <Link to="/register" className="link">
               <Button color="inherit">Register</Button>
             </Link>
           )}
-          <Link to="/cart" className="link">
+          {!detailsState && <Link to="/cart" className="link">
             <ShoppingCartIcon fontSize="large" color="inherit" />
-          </Link>
+          </Link>}
         </Toolbar>
       </AppBar>
 
       <Switch>
         <Route exact path="/items">
-          <ItemsList items={result} loading={loading} error={error} />
+          <ItemsList items={result} loading={loading} error={error} filter={filter} setFilter={setFilter} filterState={filterState} setFilterState={setFilterState}/>
         </Route>
         <Route path="/login">
           <Login />

@@ -5,10 +5,10 @@ export interface Item {
   itemName: string;
   description: string;
   price: number;
-  size: string;
   imageUrl: string;
-  itemsInStock?: number | [];
-  rating?: number;
+  category: string;
+  size: string[];
+  itemsInStock: number | [];
   numReviews?: number;
 }
 export interface SingleItemType {
@@ -16,9 +16,9 @@ export interface SingleItemType {
   itemName: string;
   description: string;
   price: number;
-  size: string;
   imageUrl: string;
-  itemsInStock?: number;
-  rating?: number;
+  category: string;
+  size: string[];
+  itemsInStock: number;
   numReviews?: number;
 }

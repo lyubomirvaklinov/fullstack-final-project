@@ -122,12 +122,7 @@ export default function MyOrders({}: Props): ReactElement {
       <h1>You Have No Active Orders</h1>
     </Box>
   ) : (
-    <Grid
-      container
-      spacing={1}
-      direction="column"
-      style={{ maxWidth: 1300, margin: '0 auto' }}
-    >
+    <Grid item xs={12} style={{ maxWidth: 1500, margin: '0 auto' }}>
       <Box display="flex" flexDirection="column" flexWrap="wrap" p={10} mt={10}>
         <TableContainer component={Paper}>
           <Table className={classes.table} aria-label="customized table">
@@ -142,44 +137,50 @@ export default function MyOrders({}: Props): ReactElement {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows?.sort((a, b) => {
-                return (!a.isCancelled === !b.isCancelled)? 0 : !a.isCancelled? -1 : 1;
-              }).map((row) => (
-                <StyledTableRow key={row._id}>
-                  <StyledTableCell component="th" scope="row">
-                    {row._id}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">{row.user}</StyledTableCell>
-                  <StyledTableCell align="right">
-                    {row.totalPrice} lv
-                  </StyledTableCell>
-                  <StyledTableCell align="right">
-                    {moment(row.createdAt.toString()).format(
-                      'MMMM Do YYYY, h:mm:ss a'
-                    )}
-                  </StyledTableCell>
-                  {row.isCancelled ? (
-                    <StyledTableCell align="right">
-                      Order Cancelled!
+              {rows
+                ?.sort((a, b) => {
+                  return !a.isCancelled === !b.isCancelled
+                    ? 0
+                    : !a.isCancelled
+                    ? -1
+                    : 1;
+                })
+                .map((row) => (
+                  <StyledTableRow key={row._id}>
+                    <StyledTableCell component="th" scope="row">
+                      {row._id}
                     </StyledTableCell>
-                  ) : (
-                    <StyledTableCell align="right">Pending</StyledTableCell>
-                  )}
-                  <StyledTableCell>
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <DeleteIcon
-                        style={{ marginTop: '15' }}
-                        onClick={() => dispatch(cancelOrder(row))}
-                      />
-                    </Box>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
+                    <StyledTableCell align="right">{row.user}</StyledTableCell>
+                    <StyledTableCell align="right">
+                      {row.totalPrice} lv
+                    </StyledTableCell>
+                    <StyledTableCell align="right">
+                      {moment(row.createdAt.toString()).format(
+                        'MMMM Do YYYY, h:mm:ss a'
+                      )}
+                    </StyledTableCell>
+                    {row.isCancelled ? (
+                      <StyledTableCell align="right">
+                        Order Cancelled!
+                      </StyledTableCell>
+                    ) : (
+                      <StyledTableCell align="right">Pending</StyledTableCell>
+                    )}
+                    <StyledTableCell>
+                      <Box
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="center"
+                        alignItems="center"
+                      >
+                        <DeleteIcon
+                          style={{ marginTop: '15' }}
+                          onClick={() => dispatch(cancelOrder(row))}
+                        />
+                      </Box>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>

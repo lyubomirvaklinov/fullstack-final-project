@@ -97,53 +97,48 @@ export default function UserManagement({}: Props): ReactElement {
       <h1>No User's To Manage</h1>
     </Box>
   ) : (
-    <Grid
-    container
-    spacing={1}
-    direction="column"
-    style={{ maxWidth: 1100, margin: '0 auto' }}
-  >
-    <Box display="flex" flexDirection="column" flexWrap="wrap" p={10} mt={10}>
-      <TableContainer component={Paper}>
-        <Table className={classes.table} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>User ID</StyledTableCell>
-              <StyledTableCell align="right">Name</StyledTableCell>
-              <StyledTableCell align="right">E-mail</StyledTableCell>
-              <StyledTableCell align="right">Requests</StyledTableCell>
-              <StyledTableCell align="right">Operations</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows?.map((row) => (
-              <StyledTableRow key={row._id}>
-                <StyledTableCell component="th" scope="row">
-                  {row._id}
-                </StyledTableCell>
-                <StyledTableCell align="right">{row.name}</StyledTableCell>
-                <StyledTableCell align="right">
-                  {row.email}
-                </StyledTableCell>
-                <StyledTableCell align="right">
-                  Request
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <DeleteIcon onClick={() => { dispatch(deleteUser(row._id))}} />
-                  </Box>
-                </StyledTableCell>
-              </StyledTableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
-  </Grid>
+    <Grid item xs={12} style={{ maxWidth: 1500, margin: '0 auto' }}>
+      <Box display="flex" flexDirection="column" flexWrap="wrap" p={10} mt={10}>
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>User ID</StyledTableCell>
+                <StyledTableCell align="right">Name</StyledTableCell>
+                <StyledTableCell align="right">E-mail</StyledTableCell>
+                <StyledTableCell align="right">Requests</StyledTableCell>
+                <StyledTableCell align="right">Operations</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows?.map((row) => (
+                <StyledTableRow key={row._id}>
+                  <StyledTableCell component="th" scope="row">
+                    {row._id}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">{row.name}</StyledTableCell>
+                  <StyledTableCell align="right">{row.email}</StyledTableCell>
+                  <StyledTableCell align="right">Request</StyledTableCell>
+                  <StyledTableCell align="center">
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <DeleteIcon
+                        onClick={() => {
+                          dispatch(deleteUser(row._id));
+                        }}
+                      />
+                    </Box>
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+    </Grid>
   );
 }

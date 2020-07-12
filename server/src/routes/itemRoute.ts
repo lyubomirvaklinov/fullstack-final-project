@@ -39,7 +39,7 @@ router.post('/manage-items', auth, isAdmin, async (req, res) => {
     size: reqData.size,
     imageUrl: reqData.imageUrl,
     itemsInStock: reqData.itemsInStock,
-    rating: reqData.rating,
+    category: reqData.category,
     numReviews: reqData.numReviews,
   });
   const newItem = await item.save();
@@ -60,6 +60,7 @@ router.put('/edit-item/:id', auth, isAdmin, async (req, res) => {
     itemToUpdate.size = reqData.size;
     itemToUpdate.imageUrl = reqData.imageUrl;
     itemToUpdate.itemsInStock = reqData.itemsInStock;
+    itemToUpdate.category = reqData.category;
 
     const updatedItem = await itemToUpdate.save();
 
