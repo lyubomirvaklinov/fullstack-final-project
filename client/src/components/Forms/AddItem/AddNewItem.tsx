@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Box from '@material-ui/core/Box';
 import {
   Button,
-  Grid,
-  MenuItem,
   Radio,
   FormControlLabel,
   Checkbox,
+  Typography,
+  Divider
 } from '@material-ui/core';
 import { Formik, Form, Field, useField, FieldAttributes } from 'formik';
-import useStyles from '../styles';
+import useStyles from '../../Profile/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveItem, updateItem } from '../../../actions/itemActions';
-import { IdType, ReduxState } from '../../../shared/shared-types';
+import { IdType } from '../../../shared/shared-types';
 import { AppState } from '../../../store';
 import { SingleItemType } from '../../../model/items-model';
 import { useHistory, useParams } from 'react-router-dom';
 import { TextField } from 'formik-material-ui';
 import { string, object, number} from 'yup';
+
 
 type MyRadioProps = { label: string } & FieldAttributes<{}>;
 
@@ -112,8 +113,31 @@ export const ManageItems: React.FC<Props> = () => {
         <Box display="flex" justifyContent="center" margin="100px">
           <Form autoComplete="off">
             <Box display="flex" justifyContent="center" alignItems="center">
-              {params.id ? <h1>Edit Item</h1> : <h1>Add New Item</h1>}
+              {params.id ? <Typography variant="h4">
+              <Box
+                p={3}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                fontWeight="fontWeightBold"
+              >
+                Edit Item
+              </Box>
+              <Divider />
+            </Typography> : <Typography variant="h4">
+              <Box
+                p={3}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                fontWeight="fontWeightBold"
+              >
+                Add Item
+              </Box>
+            <Divider />
+            </Typography>}
             </Box>
+            <Box m={3}>
             <div>
               <Field
                 name="itemName"
@@ -190,10 +214,15 @@ export const ManageItems: React.FC<Props> = () => {
               </Box>
             </div>
 
-            <Box display="flex" justifyContent="center" margin="25px">
-              <Button className="btn" type="submit">
+            <Box display="flex" justifyContent="center" flexDirection="column" m={3}>
+              <Button className={classes.btn} variant="contained"
+          color="primary" type="submit">
                 Submit
               </Button>
+              <Button className={classes.btn2} type="button" onClick={() => history.push('/items')}>
+                Cancel
+              </Button>
+            </Box>
             </Box>
           </Form>
         </Box>

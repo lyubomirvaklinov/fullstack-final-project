@@ -15,10 +15,12 @@ import {
   TableBody,
   Box,
   Grid,
+  Typography,
+  Divider,
 } from '@material-ui/core';
 import { ReduxState } from '../../shared/shared-types';
 import { listUsers, deleteUser } from '../../actions/userActions';
-import { UserListActions } from '../../shared/userType';
+import { UserListActions } from '../../model/userType';
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -84,61 +86,88 @@ export default function UserManagement({}: Props): ReactElement {
     dispatch(listUsers());
   }, [usersDelete.success]);
 
-  return usersList.userInfo?.length === 0 ? (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      flexWrap="wrap"
-      p={10}
-      mt={10}
-    >
-      <h1>No User's To Manage</h1>
-    </Box>
-  ) : (
-    <Grid item xs={12} style={{ maxWidth: 1500, margin: '0 auto' }}>
-      <Box display="flex" flexDirection="column" flexWrap="wrap" p={10} mt={10}>
-        <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>User ID</StyledTableCell>
-                <StyledTableCell align="right">Name</StyledTableCell>
-                <StyledTableCell align="right">E-mail</StyledTableCell>
-                <StyledTableCell align="right">Requests</StyledTableCell>
-                <StyledTableCell align="right">Operations</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows?.map((row) => (
-                <StyledTableRow key={row._id}>
-                  <StyledTableCell component="th" scope="row">
-                    {row._id}
-                  </StyledTableCell>
-                  <StyledTableCell align="right">{row.name}</StyledTableCell>
-                  <StyledTableCell align="right">{row.email}</StyledTableCell>
-                  <StyledTableCell align="right">Request</StyledTableCell>
-                  <StyledTableCell align="center">
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <DeleteIcon
-                        onClick={() => {
-                          dispatch(deleteUser(row._id));
-                        }}
-                      />
-                    </Box>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </Grid>
+  return (
+    <>
+      <Typography variant="h4">
+        <Box
+          display="flex"
+          justifyContent="center"
+          flexDirection="column"
+          alignItems="center"
+          fontWeight="fontWeightBold"
+          p={3}
+          m={2}
+        >
+          Users
+        </Box>
+        <Divider />
+      </Typography>
+      {usersList.userInfo?.length === 0 ? (
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          flexWrap="wrap"
+          p={10}
+          mt={10}
+        >
+          <h1>No User's To Manage</h1>
+        </Box>
+      ) : (
+        <Grid item xs={12} style={{ maxWidth: 1500, margin: '0 auto' }}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            flexWrap="wrap"
+            p={10}
+            mt={10}
+          >
+            <TableContainer component={Paper}>
+              <Table className={classes.table} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell>User ID</StyledTableCell>
+                    <StyledTableCell align="center">Name</StyledTableCell>
+                    <StyledTableCell align="center">E-mail</StyledTableCell>
+                    <StyledTableCell align="center">Operations</StyledTableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows?.map((row) => (
+                    <StyledTableRow key={row._id}>
+                      <StyledTableCell component="th" scope="row">
+                        {row._id}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {row.name}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {row.email}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        <Box
+                          display="flex"
+                          flexDirection="column"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          <DeleteIcon
+                            style={{ color: '	#a70000' }}
+                            onClick={() => {
+                              dispatch(deleteUser(row._id));
+                            }}
+                          />
+                        </Box>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </Grid>
+      )}
+    </>
   );
 }

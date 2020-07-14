@@ -1,23 +1,16 @@
-import React, { ReactElement, useState } from 'react';
-import { Item, SingleItemType } from '../../model/items-model';
-import {
-  ItemListener,
-  UserActions,
-  ReduxState,
-  LoggingActions,
-} from '../../shared/shared-types';
+import React, { ReactElement } from 'react';
+import { SingleItemType } from '../../model/items-model';
+import { ReduxState } from '../../shared/shared-types';
 import Paper from '@material-ui/core/Paper';
-import { Button, Box, TextField, Divider } from '@material-ui/core';
+import { Button, Box, Divider, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import useStyles from '../ItemsList/styles';
+import useStyles from '../Profile/styles';
 import EditIcon from '@material-ui/icons/Edit';
-
-import SaveIcon from '@material-ui/icons/Save';
 import DeleteIcon from '@material-ui/icons/Delete';
-import './SingleItem.css';
 import { Link, useRouteMatch, useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteItem } from '../../actions/itemActions';
+import { LoggingActions } from '../../model/userType';
 
 interface Props {
   item: SingleItemType;
@@ -57,49 +50,95 @@ export default function SingleItem({
   ) : error ? (
     <div>{error}</div>
   ) : (
-    <Grid item style={{ minWidth: 400, minHeight: 600 }}>
-      <div>
-        <Paper className={classes.control}>
-          {/* style={{backgroundColor: 'transparent'}} */}
-          <div className="product">
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Link to={`${match.url}/${item._id}`}>
-                <img
-                  className="product-image"
-                  src={item.imageUrl}
-                  alt="product"
-                />
-              </Link>
-            </Box>
-            <Divider />{' '}
-            <div className="product-name">
-              { item.itemsInStock && item.itemsInStock > 0 ?
-              <Link to={`${match.url}/${item._id}`}>{item.itemName}</Link>
-              :
-              <div>Out Of Stock!</div>
-              }
-              </div>
-            <div className="product-description">{item.description}</div>
-            <div className="product-price">{item.price} lv.</div>
-            <div className="product-rating">4.5 Stars (10 Reviews)</div>
-          </div>
-        </Paper>
-        <Box display="flex" justifyContent="space-between" mt={1}>
-          <Box>
-            {userInfo?.user.isAdmin && (
-              <>
-                <EditIcon onClick={handleUpdate} />
-                <DeleteIcon onClick={handleDelete} />
-              </>
-            )}
-          </Box>
+    <Grid item>
+      <Paper
+        className={classes.control}
+        style={{ minWidth: 350, minHeight: 500, backgroundColor: '#fffffa' }}
+      >
+        {/* <div className="product"> */}
+        <Box display="flex" justifyContent="center" alignItems="center">
           <Link to={`${match.url}/${item._id}`}>
-            <Box display="flex" justifyContent="flex-end">
-              <Button type="submit">Details</Button>
-            </Box>
+            <img
+              style={{ maxWidth: '20rem', maxHeight: '20rem' }}
+              src={item.imageUrl}
+            />
           </Link>
         </Box>
-      </div>
+        <Divider />{' '}
+        {item.itemsInStock && item.itemsInStock > 0 ? (
+          <Typography variant="h4">
+            <Box
+              p={3}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              fontWeight="fontWeightBold"
+            >
+              {item.itemName}
+            </Box>
+          </Typography>
+        ) : (
+          <Typography variant="h4">
+            <Box
+              p={3}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              fontWeight="fontWeightBold"
+            >
+              Out of Stock
+            </Box>
+          </Typography>
+        )}
+        <Typography variant="h6">
+          <Box
+            display="flex"
+            justifyContent="center"
+            fontWeight="fontWeightMedium"
+          >
+            {item.price} €
+          </Box>
+        </Typography>
+        <Box
+          display="flex"
+          mt={2}
+          justifyContent="flex-start"
+          fontWeight="fontWeightMedium"
+        >
+          <div>5 Stars (10 Reviews)</div>
+        </Box>
+        {/* </div> */}
+      </Paper>
+      <Box display="flex" justifyContent="space-between" mt={1}>
+        <Box>
+          {userInfo?.user.isAdmin && (
+            <>
+              <DeleteIcon onClick={handleDelete} style={{ color: '	#a70000' }} />
+            </>
+          )}
+        </Box>
+        <Box display="flex" justifyContent="flex-end">
+          {userInfo?.user.isAdmin && (
+            <Button
+              type="button"
+              className={classes.btn2}
+              onClick={handleUpdate}
+            >
+              Edit
+            </Button>
+          )}
+          <Link to={`${match.url}/${item._id}`}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.btn}
+            >
+              Details
+            </Button>
+          </Link>
+        </Box>
+      </Box>
     </Grid>
   );
 }

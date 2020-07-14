@@ -10,21 +10,20 @@ import {
   ListItemText,
 } from '@material-ui/core';
 import useStyles from './styles';
-import { Formik, Form, Field, FormikValues } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import Success from './Success';
 import { string, object } from 'yup';
-import { useLocation, Link, useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { TextField } from 'formik-material-ui';
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
-import HomeIcon from '@material-ui/icons/Home';
+
 import {
   ReduxState,
-  UserActions,
-  LoggingActions,
 } from '../../shared/shared-types';
 import { updateUser, loggingAction } from '../../actions/userActions';
+import { LoggingActions, UserActions } from '../../model/userType';
 
 interface Props {}
 
@@ -43,6 +42,7 @@ export default function ProfileForm({}: Props): ReactElement {
   const userUpdate: UserActions = useSelector(
     (state: ReduxState) => state.userUpdate
   );
+  console.log(userUpdate);
 
   const { success } = userUpdate;
   const { userInfo } = userLoggedIn;
@@ -76,61 +76,57 @@ export default function ProfileForm({}: Props): ReactElement {
         spacing={1}
         style={{ maxWidth: 400, margin: '0 auto' }}
       >
-        <Paper className={classes.control}>
+        {/* <Paper className={classes.control} style={{backgroundColor: "transparent"}}> */}
+        <Typography variant="h4">
+          <Box
+            p={3}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            fontWeight="fontWeightBold"
+          >
+            Profile Information
+          </Box>
+          <Divider />
+        </Typography>
+        <Divider />
+        <Box mt={5}>
+          <Box paddingBottom={2} display="flex">
+            <ListItemIcon>
+              <PersonIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={
+                userInfo?.user.isAdmin
+                  ? `${userInfo?.user.name} - Administrator`
+                  : userInfo?.user.name
+              }
+            />
+          </Box>
           <Box
             paddingBottom={2}
             display="flex"
             justifyContent="center"
             alignItems="center"
           >
-            <Typography variant="h5">Profile Information</Typography>
+            <ListItemIcon>
+              <EmailIcon />
+            </ListItemIcon>
+            <ListItemText primary={userInfo?.user.email} />
           </Box>
-          <Divider />
-          <Box mt={5}>
-            <Box paddingBottom={2} display="flex">
-              <ListItemIcon>
-                <PersonIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={
-                  userInfo?.user.isAdmin
-                    ? `${userInfo?.user.name} - Administrator`
-                    : userInfo?.user.name
-                }
-              />
-            </Box>
-            <Box
-              paddingBottom={2}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <ListItemIcon>
-                <EmailIcon />
-              </ListItemIcon>
-              <ListItemText primary={userInfo?.user.email} />
-            </Box>
-            <Box
-              paddingBottom={2}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-            >
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Address" />
-            </Box>{' '}
-          </Box>
-        </Paper>
-        <Button
-          variant="contained"
-          color="primary"
-          style={{ marginTop: 'auto' }}
-          onClick={handleEditToggle}
-        >
-          Edit
-        </Button>
+        </Box>
+        <Box mt={3} display="flex" justifyContent="center" alignItems="center">
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.btn}
+            style={{ marginTop: 'auto' }}
+            onClick={handleEditToggle}
+          >
+            Edit
+          </Button>
+        </Box>
+        {/* </Paper> */}
       </Grid>
     </Box>
   ) : success ? (
@@ -148,41 +144,61 @@ export default function ProfileForm({}: Props): ReactElement {
         }}
       >
         {({ values, handleChange }) => (
-          <Box display="flex" justifyContent="center" marginTop="100px">
+          <Box display="flex" justifyContent="center" marginTop="80px">
             <Form autoComplete="off">
-              <Box
-                mb={3}
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <h1>Edit Profile</h1>
-              </Box>
-              <div>
-                <Field
-                  fullWidth
-                  name="name"
-                  component={TextField}
-                  label="First Name"
-                  onChange={handleChange}
-                />
-              </div>
-              <div>
-                <Field
-                  style={{ width: 250 }}
-                  name="email"
-                  component={TextField}
-                  label="E-mail"
-                  onChange={handleChange}
-                />
-              </div>
-              <Box display="flex" justifyContent="center" marginTop="25px">
-                <Button className="btn" type="submit">
-                  Edit
-                </Button>
-                <Button className="btn" type="submit" onClick={handleEditToggle}>
-                  Cancel
-                </Button>
+              <Typography variant="h4">
+                <Box
+                  p={3}
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  fontWeight="fontWeightBold"
+                >
+                  Edit Item
+                </Box>
+                <Divider />
+              </Typography>
+              <Box mt={4}>
+                <div>
+                  <Field
+                    fullWidth
+                    name="name"
+                    component={TextField}
+                    label="First Name"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <Field
+                    style={{ width: 250 }}
+                    name="email"
+                    component={TextField}
+                    label="E-mail"
+                    onChange={handleChange}
+                  />
+                </div>
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  flexDirection="column"
+                  m={3}
+                >
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    className={classes.btn}
+                  >
+                    Edit
+                  </Button>
+                  <Button
+                    type="submit"
+                    className={classes.btn2}
+                    onClick={handleEditToggle}
+                  >
+                    Cancel
+                  </Button>
+                </Box>
               </Box>
             </Form>
           </Box>

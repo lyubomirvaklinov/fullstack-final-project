@@ -1,14 +1,16 @@
-import { Item, SingleItemType } from '../model/items-model';
-import { IdType, SaveItemRequest, UserActions } from '../shared/shared-types';
-import { CartPayload } from '../shared/cartTypes';
+import { SingleItemType } from '../model/items-model';
+import { IdType } from '../shared/shared-types';
+import { SaveItemRequest } from '../model/itemTypes';
+import { UserActions } from '../model/userType';
+import { CartPayload } from '../model/cartTypes';
 import {
   LogInUserType,
   LogInUserRequest,
   RegisterUserRequest,
-  UserListActions,
-} from '../shared/userType';
-import { OrderDetails, Order, CheckOutOrderType } from '../shared/orderTypes';
-import { UserListType} from '../shared/userType';
+  RegisterAndUpdateActions,
+} from '../model/userType';
+import { OrderDetails, Order, CheckOutOrderType, OrderList } from '../model/orderTypes';
+import { UserListType} from '../model/userType';
 
 export const ITEM_LIST_REQUEST = 'ITEM_LIST_REQUEST';
 export const ITEM_LIST_SUCCESS = 'ITEM_LIST_SUCCESS';
@@ -69,6 +71,9 @@ export const SAVE_ORDER_DETAILS = 'SAVE_ORDER_DETAILS';
 export const LIST_MY_ORDERS_REQUEST = 'LIST_MY_ORDERS_REQUEST';
 export const LIST_MY_ORDERS_SUCCESS = 'LIST_MY_ORDERS_SUCCESS';
 export const LIST_MY_ORDERS_FAILURE = 'LIST_MY_ORDERS_FAILURE';
+export const LIST_ORDER_DETAILS_REQUEST = 'LIST_ORDER_DETAILS_REQUEST';
+export const LIST_ORDER_DETAILS_SUCCESS = 'LIST_ORDER_DETAILS_SUCCESS';
+export const LIST_ORDER_DETAILS_FAILURE = 'LIST_ORDER_DETAILS_FAILURE';
 
 //  Item interfaces
 
@@ -176,7 +181,7 @@ export interface UserLogoutRequest {
 }
 export interface UserLogoutSuccess {
   type: typeof USER_LOGOUT_SUCCESS;
-  payload: any;
+  payload: undefined;
 }
 export interface UserLogoutFailure {
   type: typeof USER_LOGOUT_FAILURE;
@@ -188,7 +193,7 @@ export interface UserRegisterRequest {
 }
 export interface UserRegisterSuccess {
   type: typeof USER_REGISTER_SUCCESS;
-  payload: any;
+  payload: UserListType;
 }
 export interface UserRegisterFailure {
   type: typeof USER_REGISTER_FAILURE;
@@ -204,7 +209,7 @@ export interface UserUpdateRequest {
 }
 export interface UserUpdateSuccess {
   type: typeof USER_UPDATE_SUCCESS;
-  payload: any;
+  payload: UserListType;
 }
 export interface UserUpdateFailure {
   type: typeof USER_UPDATE_FAILURE;
@@ -301,12 +306,25 @@ export interface ListOrderRequest {
 
 export interface ListOrderSuccess {
   type: typeof LIST_ORDER_SUCCESS;
-  payload: any;
+  payload: Order[];
 }
 
 export interface ListOrderFailure {
   type: typeof LIST_ORDER_FAILURE;
-  payload: any;
+  payload: string;
+}
+export interface ListOrderDetailsRequest {
+  type: typeof LIST_ORDER_DETAILS_REQUEST;
+}
+
+export interface ListOrderDetailsSuccess {
+  type: typeof LIST_ORDER_DETAILS_SUCCESS;
+  payload: Order;
+}
+
+export interface ListOrderDetailsFailure {
+  type: typeof LIST_ORDER_DETAILS_FAILURE;
+  payload: string;
 }
 
 export interface ListMyOrdersRequest {
@@ -315,12 +333,12 @@ export interface ListMyOrdersRequest {
 
 export interface ListMyOrdersSuccess {
   type: typeof LIST_MY_ORDERS_SUCCESS;
-  payload: any;
+  payload: Order[];
 }
 
 export interface ListMyOrdersFailure {
   type: typeof LIST_MY_ORDERS_FAILURE;
-  payload: any;
+  payload: string;
 }
 
 export type ItemActionTypes =
@@ -353,6 +371,9 @@ export type OrderActionTypes =
 | ListOrderRequest
 | ListOrderSuccess
 | ListOrderFailure
+| ListOrderDetailsRequest
+| ListOrderDetailsSuccess
+| ListOrderDetailsFailure
 | ListMyOrdersRequest
 | ListMyOrdersSuccess
 | ListMyOrdersFailure

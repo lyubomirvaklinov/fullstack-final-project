@@ -8,8 +8,6 @@ import {
   USER_REGISTER_SUCCESS,
   USER_REGISTER_FAILURE,
   USER_LOGOUT_REQUEST,
-  USER_LOGOUT_SUCCESS,
-  USER_LOGOUT_FAILURE,
   USER_REGISTER_CLEANUP,
   USER_LIST_REQUEST,
   USER_LIST_SUCCESS,
@@ -24,13 +22,11 @@ import {
 } from '../const/item-constants';
 import axios from 'axios';
 import {
-  LoggingActions,
-  LogOutActions,
-  ReduxState,
   getStateType,
   IdType,
 } from '../shared/shared-types';
-import { UserListType } from '../shared/userType';
+import { UserListType } from '../model/userType';
+import { USER_LOGOUT_SUCCESS } from '../const/item-constants';
 
 const listUsers = () => async (
   dispatch: Dispatch<AppActions>,
@@ -84,6 +80,7 @@ const loggingAction = (email?: string, password?: string) => async (
 ) => {
   if (!email && !password) {
     dispatch({ type: USER_LOGOUT_REQUEST, payload: undefined });
+    // dispatch({ type: USER_LOGOUT_SUCCESS, payload: undefined });
     return;
   }
   dispatch({ type: USER_LOGIN_REQUEST, payload: { email, password } });

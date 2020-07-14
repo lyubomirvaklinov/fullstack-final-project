@@ -19,9 +19,11 @@ import {
   CANCEL_ORDER_REQUEST,
   CANCEL_ORDER_SUCCESS,
   CANCEL_ORDER_FAILURE,
+  LIST_ORDER_DETAILS_REQUEST,
 } from '../const/item-constants';
-import { OrderCreate, OrderDelete } from '../shared/orderTypes';
-import { OrderDetails } from '../shared/orderTypes';
+import { OrderCreate, OrderDelete, OrderList, SingleOrderDetails } from '../model/orderTypes';
+import { OrderDetails } from '../model/orderTypes';
+import { LIST_ORDER_DETAILS_SUCCESS, LIST_ORDER_DETAILS_FAILURE } from '../const/item-constants';
 
 
 const orderCreateState: OrderCreate = { loading: false };
@@ -89,7 +91,7 @@ const orderDetailsReducer = (state = orderDetailsReducerState, action: AppAction
   }
 };
 
-const orderListReducer = (state = orderCreateState, action: AppActions) => {
+const orderListReducer = (state = orderCreateState, action: AppActions): OrderList => {
   switch (action.type) {
     case LIST_ORDER_REQUEST:
       return { loading: true };
@@ -102,7 +104,24 @@ const orderListReducer = (state = orderCreateState, action: AppActions) => {
   }
 };
 
-const myOrdersListReducer = (state = orderCreateState, action: AppActions) => {
+const orderDetailsList: SingleOrderDetails = { loading: false };
+
+const orderDetailsListReducer = (state = orderDetailsList, action: AppActions): SingleOrderDetails => {
+  switch (action.type) {
+    case LIST_ORDER_DETAILS_REQUEST:
+      return { loading: true };
+    case LIST_ORDER_DETAILS_SUCCESS:
+      return { loading: false, order: action.payload, success: true };
+    case LIST_ORDER_DETAILS_FAILURE:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+const myOrdersList: OrderList = { loading: false };
+
+const myOrdersListReducer = (state = orderCreateState, action: AppActions): OrderList => {
   switch (action.type) {
     case LIST_MY_ORDERS_REQUEST:
       return { loading: true };
@@ -115,4 +134,4 @@ const myOrdersListReducer = (state = orderCreateState, action: AppActions) => {
   }
 };
 
-export { orderCreateReducer, orderListReducer, orderDetailsReducer, orderUpdateReducer, orderDeleteReducer, myOrdersListReducer, orderCancelReducer };
+export { orderCreateReducer, orderListReducer, orderDetailsReducer, orderUpdateReducer, orderDeleteReducer, myOrdersListReducer, orderCancelReducer, orderDetailsListReducer };

@@ -1,17 +1,13 @@
-:root {
-  --primary-color: rgba(0, 0, 0, 0.1);
-  --overlay-color: rgba(0, 0, 0);
-}
-
 * {
   padding: 0;
   margin: 0;
+  font-family: 'Roboto Thin';
+}
+a {
+  text-decoration: none;
 }
 
-/* body {
-  background-image: linear-gradient(var(--primary-color), var(--primary-color)),
-    url('/img/wall.jpg');
-  background-size: cover;
-  background-position: center; 
- font-family: 'Roboto';
-} */
+body {
+  /* background-color:rgba(239,187,255, 0.1); */
+  background-color:#e8f7ff;
+} 

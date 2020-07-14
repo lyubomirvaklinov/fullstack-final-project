@@ -1,6 +1,5 @@
 import { CartPayload } from './cartTypes';
 
-
 export interface OrderDetails {
   firstName?: string;
   lastName?: string;
@@ -19,6 +18,12 @@ export interface OrderCreate {
   loading: boolean;
   order?: Order[];
   success?: boolean;
+}
+export interface SingleOrderDetails {
+  loading: boolean;
+  order?: Order;
+  success?: boolean;
+  error?: string;
 }
 export interface OrderDelete {
   loading: boolean;
@@ -43,4 +48,10 @@ export interface Order {
   orderItems: OrderItem[];
   totalPrice: number;
   updatedAt: string;
+}
+export interface OrderList {
+  loading: boolean;
+  order?: Order[];
+  success?: boolean;
+  error?: string;
 }

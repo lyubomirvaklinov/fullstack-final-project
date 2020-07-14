@@ -1,6 +1,6 @@
-import { UserActionTypes, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAILURE, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAILURE, USER_LOGOUT_REQUEST, USER_REGISTER_CLEANUP, UserListRequest, USER_LIST_REQUEST, USER_LIST_SUCCESS, USER_LIST_FAILURE, USER_DELETE_REQUEST, USER_DELETE_SUCCESS, USER_DELETE_FAILURE, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS, USER_UPDATE_FAILURE, USER_UPDATE_CLEANUP } from '../const/item-constants';
-import { UserActions, LoggingActions } from '../shared/shared-types';
-import { UserListActions } from '../shared/userType';
+import { UserActionTypes, USER_LOGIN_REQUEST, USER_LOGIN_SUCCESS, USER_LOGIN_FAILURE, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAILURE, USER_LOGOUT_REQUEST, USER_REGISTER_CLEANUP, USER_LIST_REQUEST, USER_LIST_SUCCESS, USER_LIST_FAILURE, USER_DELETE_REQUEST, USER_DELETE_SUCCESS, USER_DELETE_FAILURE, USER_UPDATE_REQUEST, USER_UPDATE_SUCCESS, USER_UPDATE_FAILURE, USER_UPDATE_CLEANUP, USER_LOGOUT_SUCCESS } from '../const/item-constants';
+import { LoggingActions } from '../model/userType';
+import { UserListActions, RegisterAndUpdateActions } from '../model/userType';
 
 const userState: UserListActions = { loading: true, userInfo: [], error: '' };
 
@@ -47,16 +47,18 @@ const userLoggingReducer = (state=initialLogInState, action:UserActionTypes ): L
     case USER_LOGIN_FAILURE:
       return {isLoggedIn: false, error: action.payload};
       case USER_LOGOUT_REQUEST:
-        return { isLoggedIn: false, userInfo: undefined};
+        return { isLoggedIn: false, userInfo: undefined, error: undefined};
+      case USER_LOGOUT_SUCCESS:
+        return { isLoggedIn: false, userInfo: undefined, error: undefined};
     default:
       return state;
   }
 }
 
 
-const initialRegisterState: UserActions = {loading: false};
+const initialRegisterState: RegisterAndUpdateActions = {loading: false};
 
-const userRegisterReducer = (state=initialRegisterState, action:UserActionTypes ): UserActions => {
+const userRegisterReducer = (state=initialRegisterState, action:UserActionTypes ): RegisterAndUpdateActions => {
   switch(action.type){
     case USER_REGISTER_REQUEST:
       return { loading: true};
@@ -70,9 +72,9 @@ const userRegisterReducer = (state=initialRegisterState, action:UserActionTypes 
       return state;
   }
 }
-const initialUpdateState: UserActions = {loading: false};
+const initialUpdateState: RegisterAndUpdateActions = {loading: false};
 
-const userUpdateReducer = (state=initialRegisterState, action:UserActionTypes ): UserActions => {
+const userUpdateReducer = (state=initialUpdateState, action:UserActionTypes ): RegisterAndUpdateActions => {
   switch(action.type){
     case USER_UPDATE_REQUEST:
       return { loading: true};

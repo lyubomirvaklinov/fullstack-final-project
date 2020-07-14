@@ -1,6 +1,6 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import { Grid, Paper, Box, Button } from '@material-ui/core';
-import useStyles from './styles';
+import useStyles from '../Profile/styles';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { removeAllCartItems } from '../../actions/cartActions';
@@ -31,16 +31,18 @@ export default function ThankYou({}: Props): ReactElement {
       <Box mt={30} display="flex" justifyContent=" center" alignItems="center">
         <Paper className={classes.control}>
           <h1>Thank You!</h1>
+          <Box mt={3} display="flex" justifyContent="center">
+            <Button
+            variant="contained"
+              color="primary"
+              className={classes.btn}
+              onClick={handleRedirect}
+            >
+              Back To Store
+            </Button>
+          </Box>
         </Paper>
       </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleRedirect}
-        style={{ marginTop: '20' }}
-      >
-        Back To Item Section
-      </Button>
     </Grid>
   );
 }

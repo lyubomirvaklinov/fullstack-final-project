@@ -16,14 +16,18 @@ import {
   TableBody,
   Box,
   Grid,
+  Typography,
+  Divider,
 } from '@material-ui/core';
-import { ReduxState } from '../../../shared/shared-types';
 import {
-  listMyOrders,
-  deleteOrder,
-  cancelOrder,
-} from '../../../actions/orderActions';
-import { OrderItem, OrderCreate } from '../../../shared/orderTypes';
+  ReduxState,
+  IdType,
+} from '../../../shared/shared-types';
+import { listMyOrders, cancelOrder, listOrderDetails } from '../../../actions/orderActions';
+import { OrderItem, OrderCreate } from '../../../model/orderTypes';
+import InfoIcon from '@material-ui/icons/Info';
+import { useHistory, Link } from 'react-router-dom';
+import { LoggingActions } from '../../../model/userType';
 
 const StyledTableCell = withStyles((theme: Theme) =>
   createStyles({
@@ -81,11 +85,17 @@ export default function MyOrders({}: Props): ReactElement {
   const myOrderList: OrderCreate = useSelector(
     (state: ReduxState) => state.listMyOrders
   );
+  
+  const userLoggedIn: LoggingActions = useSelector(
+    (state: ReduxState) => state.userLogging
+  );
 
   const cancelledOrder: OrderCreate = useSelector(
     (state: ReduxState) => state.cancelOrder
   );
+
   const classes = useStyles();
+  const history = useHistory();
 
   const dispatch = useDispatch();
 
@@ -109,82 +119,119 @@ export default function MyOrders({}: Props): ReactElement {
     dispatch(listMyOrders());
   }, [cancelledOrder?.success]);
 
-  return myOrderList.order?.length === 0 ? (
-    <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center"
-      flexWrap="wrap"
-      p={10}
-      mt={10}
-    >
-      <h1>You Have No Active Orders</h1>
-    </Box>
-  ) : (
-    <Grid item xs={12} style={{ maxWidth: 1500, margin: '0 auto' }}>
-      <Box display="flex" flexDirection="column" flexWrap="wrap" p={10} mt={10}>
-        <TableContainer component={Paper}>
-          <Table className={classes.table} aria-label="customized table">
-            <TableHead>
-              <TableRow>
-                <StyledTableCell>Order ID</StyledTableCell>
-                <StyledTableCell>User ID</StyledTableCell>
-                <StyledTableCell align="right">Total Price</StyledTableCell>
-                <StyledTableCell align="right">Created At</StyledTableCell>
-                <StyledTableCell align="right">Status</StyledTableCell>
-                <StyledTableCell align="right">Cancel Order</StyledTableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows
-                ?.sort((a, b) => {
-                  return !a.isCancelled === !b.isCancelled
-                    ? 0
-                    : !a.isCancelled
-                    ? -1
-                    : 1;
-                })
-                .map((row) => (
-                  <StyledTableRow key={row._id}>
-                    <StyledTableCell component="th" scope="row">
-                      {row._id}
+  const handleInfoClick = (id: IdType) => {
+    history.push(`/order/${id}`);
+  };
+
+  return (
+    <>
+      <Typography variant="h5">
+        <Box
+          display="flex"
+          justifyContent="center"
+          flexDirection="column"
+          alignItems="center"
+          fontWeight="fontWeightBold"
+          p={3}
+          m={2}
+        >
+          My Orders
+        </Box>
+        <Divider />
+      </Typography>
+      {myOrderList.order?.length === 0 ? (
+        <Box
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+          alignItems="center"
+          flexWrap="wrap"
+          p={10}
+          mt={3}
+        >
+          <h1>You Have No Active Orders</h1>
+        </Box>
+      ) : (
+        <Grid item xs={12} style={{ maxWidth: 1500, margin: '0 auto' }}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            flexWrap="wrap"
+            p={10}
+            mt={3}
+          >
+            <TableContainer component={Paper}>
+              <Table className={classes.table} aria-label="customized table">
+                <TableHead>
+                  <TableRow>
+                    <StyledTableCell align="left">Info</StyledTableCell>
+                    <StyledTableCell align="center">User</StyledTableCell>
+                    <StyledTableCell align="center">
+                      Total Price
                     </StyledTableCell>
-                    <StyledTableCell align="right">{row.user}</StyledTableCell>
-                    <StyledTableCell align="right">
-                      {row.totalPrice} lv
+                    <StyledTableCell align="center">Created At</StyledTableCell>
+                    <StyledTableCell align="center">Status</StyledTableCell>
+                    <StyledTableCell align="center">
+                      Cancel Order
                     </StyledTableCell>
-                    <StyledTableCell align="right">
-                      {moment(row.createdAt.toString()).format(
-                        'MMMM Do YYYY, h:mm:ss a'
-                      )}
-                    </StyledTableCell>
-                    {row.isCancelled ? (
-                      <StyledTableCell align="right">
-                        Order Cancelled!
-                      </StyledTableCell>
-                    ) : (
-                      <StyledTableCell align="right">Pending</StyledTableCell>
-                    )}
-                    <StyledTableCell>
-                      <Box
-                        display="flex"
-                        flexDirection="column"
-                        justifyContent="center"
-                        alignItems="center"
-                      >
-                        <DeleteIcon
-                          style={{ marginTop: '15' }}
-                          onClick={() => dispatch(cancelOrder(row))}
-                        />
-                      </Box>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </Grid>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows
+                    ?.sort((a, b) => {
+                      return !a.isCancelled === !b.isCancelled
+                        ? 0
+                        : !a.isCancelled
+                        ? -1
+                        : 1;
+                    })
+                    .map((row) => (
+                      <StyledTableRow key={row._id}>
+                        <StyledTableCell component="th" scope="row">
+                          {/* {row._id} */}
+                          <InfoIcon onClick={() => handleInfoClick(row._id)} />
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {userLoggedIn.userInfo?.user.name}
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {row.totalPrice} lv
+                        </StyledTableCell>
+                        <StyledTableCell align="center">
+                          {moment(row.createdAt.toString()).format(
+                            'MMMM Do YYYY, h:mm:ss a'
+                          )}
+                        </StyledTableCell>
+                        {row.isCancelled ? (
+                          <StyledTableCell align="center">
+                            Cancellation Requested
+                          </StyledTableCell>
+                        ) : (
+                          <StyledTableCell align="center">
+                            Active
+                          </StyledTableCell>
+                        )}
+                        <StyledTableCell>
+                          <Box
+                            display="flex"
+                            flexDirection="column"
+                            justifyContent="center"
+                            alignItems="center"
+                          >
+                            <DeleteIcon
+                              style={{ marginTop: '3', color: '	#a70000' }}
+                              onClick={() => dispatch(cancelOrder(row))}
+                            />
+                          </Box>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </Grid>
+      )}
+    </>
   );
 }

@@ -15,12 +15,7 @@ import CartView from './components/Cart/CartView';
 import AddBoxIcon from '@material-ui/icons/AddBox';
 import { listItems } from './actions/itemActions';
 import { loggingAction } from './actions/userActions';
-import {
-  ReduxState,
-  UserActions,
-  LoggingActions,
-  LogOutActions,
-} from './shared/shared-types';
+import { ReduxState } from './shared/shared-types';
 import Product from './components/ProductView/Product';
 import Registration from './components/Forms/Register/Registration';
 import { ManageItems } from './components/Forms/AddItem/AddNewItem';
@@ -28,7 +23,6 @@ import Delivery from './components/Delivery/Delivery';
 import CheckOut from './components/CheckOut/CheckOut';
 import ThankYou from './components/CheckOut/ThankYou';
 import ProfileView from './components/Profile/ProfileView';
-import { LogInUserType } from './shared/userType';
 import MyOrders from './components/Profile/MyOrders/MyOrders';
 import AdminOrderView from './components/Profile/AdminOrdersView/AdminOrderView';
 import UserManagement from './components/UserManagement/UserManagement';
@@ -38,7 +32,6 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Container,
   Divider,
   Box,
 } from '@material-ui/core';
@@ -48,6 +41,9 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ShopIcon from '@material-ui/icons/Shop';
 import PeopleIcon from '@material-ui/icons/People';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import { AddToCartReducerState } from './model/cartTypes';
+import MyOrderView from './components/Profile/MyOrders/MyOrderView';
+import { LoggingActions } from './model/userType';
 
 const App: React.FC = () => {
   const itemsList = useSelector((state: ReduxState) => {
@@ -71,7 +67,11 @@ const App: React.FC = () => {
   const orderDetails: any = useSelector(
     (state: ReduxState) => state.orderDetails
   );
-  
+
+  const cart: AddToCartReducerState = useSelector(
+    (state: ReduxState) => state.cart
+  );
+
   const [filter, setFilter] = useState({
     category: 'All',
     price: '',
@@ -84,7 +84,6 @@ const App: React.FC = () => {
   const detailsState = localStorage.getItem('order-details');
 
   useEffect(() => {
-    console.log(detailsState)
     dispatch(listItems());
   }, [
     editItemSuccess.success,
@@ -92,6 +91,7 @@ const App: React.FC = () => {
     itemDeleteSuccess.success,
     orderDetails,
     detailsState,
+    cart,
   ]);
 
   const { loading, result, error } = itemsList;
@@ -104,7 +104,7 @@ const App: React.FC = () => {
     setFilter({
       category: 'All',
       price: '',
-    })
+    });
     setFilterState(false);
   };
 
@@ -117,8 +117,7 @@ const App: React.FC = () => {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
-        {/* style={{ background: '#2E3B55' }} */}
+      <AppBar position="static" style={{ background: '#660066' }}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
             {!detailsState && <MenuIcon onClick={handleDrawerOpen} />}
@@ -188,7 +187,14 @@ const App: React.FC = () => {
             </List>
           </Drawer>
 
-          {userInfo && !detailsState  ? (
+          {!detailsState && (
+            <Box display="flex">
+              <Link to="/items">
+                <HomeIcon style={{color: "#f1f1f1"}}/>
+              </Link>
+            </Box>
+          )}
+          {userInfo && !detailsState ? (
             <Link to="/profile" className="link">
               <Button color="inherit" className="link">
                 {userInfo.user.isAdmin ? (
@@ -198,12 +204,14 @@ const App: React.FC = () => {
                 )}
               </Button>
             </Link>
-          ) : !detailsState &&(
-            <Link to="/login" className="link">
-              <Button color="inherit" className="link">
-                Login
-              </Button>
-            </Link>
+          ) : (
+            !detailsState && (
+              <Link to="/login" className="link">
+                <Button color="inherit" className="link">
+                  Login
+                </Button>
+              </Link>
+            )
           )}
 
           {userInfo && !detailsState ? (
@@ -212,20 +220,32 @@ const App: React.FC = () => {
                 Log Out
               </Button>
             </Link>
-          ) : !detailsState && (
-            <Link to="/register" className="link">
-              <Button color="inherit">Register</Button>
+          ) : (
+            !detailsState && (
+              <Link to="/register" className="link">
+                <Button color="inherit">Register</Button>
+              </Link>
+            )
+          )}
+          {!detailsState && (
+            <Link to="/cart" className="link">
+              <ShoppingCartIcon fontSize="large" color="inherit" />
             </Link>
           )}
-          {!detailsState && <Link to="/cart" className="link">
-            <ShoppingCartIcon fontSize="large" color="inherit" />
-          </Link>}
         </Toolbar>
       </AppBar>
 
       <Switch>
         <Route exact path="/items">
-          <ItemsList items={result} loading={loading} error={error} filter={filter} setFilter={setFilter} filterState={filterState} setFilterState={setFilterState}/>
+          <ItemsList
+            items={result}
+            loading={loading}
+            error={error}
+            filter={filter}
+            setFilter={setFilter}
+            filterState={filterState}
+            setFilterState={setFilterState}
+          />
         </Route>
         <Route path="/login">
           <Login />
@@ -244,6 +264,9 @@ const App: React.FC = () => {
         </Route>
         <Route path="/my-orders">
           <MyOrders />
+        </Route>
+        <Route path="/order/:id">
+          <MyOrderView />
         </Route>
         <Route path="/delivery-details">
           <Delivery />

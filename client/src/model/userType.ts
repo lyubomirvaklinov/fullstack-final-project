@@ -1,8 +1,34 @@
+export interface UserActions {
+  loading: boolean;
+  userInfo?: LogInUserType;
+  success?: boolean;
+  error?: string;
+}
+
+export interface LoggingActions {
+  isLoggedIn: boolean;
+  userInfo?: LogInUserType;
+  error?: string;
+}
+export interface LogOutActions {
+  isLoggedOut: boolean;
+  userInfo?: LogInUserType;
+  error?: string;
+}
+
 export interface RegisterUserType {
   name: string;
   email: string;
   password: string;
 }
+
+export interface RegisterAndUpdateActions {
+  loading: boolean;
+  success?: boolean;
+  userInfo?: UserListType;
+  error?: string;
+}
+
 export interface LogInUserType {
   token: string;
   user: {
@@ -28,12 +54,6 @@ export interface UserListActions {
   error?: string;
   success?: boolean;
 }
-
-// export interface UserManage {
-//   loading: boolean;
-//   userInfo?: UserListType,
-//   success?: boolean;
-// }
 
 export interface UserListType {
   _id: string;

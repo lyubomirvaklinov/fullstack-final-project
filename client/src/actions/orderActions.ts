@@ -22,9 +22,11 @@ import {
   CANCEL_ORDER_REQUEST,
   CANCEL_ORDER_SUCCESS,
   CANCEL_ORDER_FAILURE,
+  LIST_ORDER_DETAILS_REQUEST,
 } from '../const/item-constants';
-import { OrderDetails, Order, CheckOutOrderType } from '../shared/orderTypes';
+import { OrderDetails, Order, CheckOutOrderType } from '../model/orderTypes';
 import moment from 'moment';
+import { LIST_ORDER_DETAILS_SUCCESS, LIST_ORDER_DETAILS_FAILURE } from '../const/item-constants';
 
 const saveOrderDetails = (details: OrderDetails) => async (
   dispatch: Dispatch<AppActions>
@@ -177,5 +179,23 @@ const listMyOrders = () => async (dispatch: Dispatch<AppActions>,
     dispatch({ type:LIST_MY_ORDERS_FAILURE, payload: error.message });
   }
 }
+const listOrderDetails = (orderId: IdType) => async (dispatch: Dispatch<AppActions>,
+  getState: getStateType) => {
 
-export {saveOrderDetails, createOrder, listOrders, listMyOrders, updateOrder, deleteOrder, cancelOrder }
+  try {
+    dispatch({ type: LIST_ORDER_DETAILS_REQUEST });
+    const { userLogging: { userInfo } } = getState();
+    if(userInfo) {
+      const { data } = await axios.get(`/api/orders/order/${orderId}`, {
+        headers:
+          { Authorization: 'Bearer ' + userInfo.token }
+      });
+
+      dispatch({ type: LIST_ORDER_DETAILS_SUCCESS, payload: data })
+    }
+  } catch (error) {
+    dispatch({ type:LIST_ORDER_DETAILS_FAILURE, payload: error.message });
+  }
+}
+
+export {saveOrderDetails, createOrder, listOrders, listMyOrders, listOrderDetails, updateOrder, deleteOrder, cancelOrder }

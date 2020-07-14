@@ -4,7 +4,7 @@ import storage from 'redux-persist/lib/storage';
 import { itemListReducer, itemDetailsReducer, itemSaveReducer, itemUpdateReducer, itemDeleteReducer } from './itemListReducer';
 import { cartReducer } from './cartReducers';
 import { userRegisterReducer, userLoggingReducer, usersListReducer, userDeleteReducer, userUpdateReducer } from './userReducers';
-import { orderCreateReducer, orderListReducer, orderDetailsReducer, orderDeleteReducer, orderUpdateReducer, myOrdersListReducer, orderCancelReducer } from './orderReducers';
+import { orderCreateReducer, orderListReducer, orderDetailsReducer, orderDeleteReducer, orderUpdateReducer, myOrdersListReducer, orderCancelReducer, orderDetailsListReducer } from './orderReducers';
 
 
 const rootPersistConfig = {
@@ -32,6 +32,7 @@ const rootReducer = combineReducers({
   updateOrder: orderUpdateReducer,
   deleteOrders: orderDeleteReducer,
   orderDetails: orderDetailsReducer, 
+  singleOrderDetails: orderDetailsListReducer, 
   cancelOrder: orderCancelReducer
 });
 

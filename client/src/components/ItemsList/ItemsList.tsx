@@ -1,9 +1,9 @@
-import React, { ReactElement, useState } from 'react';
-import useStyles from './styles';
+import React, { ReactElement } from 'react';
+import useStyles from '../Profile/styles';
 import Grid from '@material-ui/core/Grid';
 import SingleItem from '../SingleItem/SingleItem';
-import { ItemListProps } from '../../shared/shared-types';
-import { Box, Button } from '@material-ui/core';
+import { ItemListProps } from '../../model/itemTypes';
+import { Box, Button, Typography, Divider } from '@material-ui/core';
 import { Formik, Form } from 'formik';
 import { MyRadio } from '../Forms/AddItem/AddNewItem';
 import FilterListIcon from '@material-ui/icons/FilterList';
@@ -17,7 +17,6 @@ export default function ItemsList({
   ...rest
 }: ItemListProps): ReactElement {
   const classes = useStyles();
-  
 
   const toggleFilter = () => {
     setFilterState(!filterState);
@@ -25,7 +24,21 @@ export default function ItemsList({
 
   return (
     <Box>
-      <Box m={3} display="flex" justifyContent="flex-end">
+       <Typography variant="h4">
+        <Box
+          display="flex"
+          justifyContent="center"
+          flexDirection="column"
+          alignItems="center"
+          fontWeight="fontWeightBold"
+          p={3}
+          m={2}
+        >
+          Shop
+        </Box>
+        <Divider />
+      </Typography>
+      <Box display="flex" justifyContent="flex-end">
         {!filterState ? (
           <FilterListIcon onClick={toggleFilter} fontSize="large" />
         ) : (
@@ -82,7 +95,25 @@ export default function ItemsList({
                     />
                   </Box>
                   <Box display="flex" justifyContent="center" m={1}>
-                    <Button type="submit">Filter</Button>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      className={classes.btn}
+                    >
+                      Filter
+                    </Button>
+                  </Box>
+                  <Box display="flex" justifyContent="center" m={1}>
+                    <Button
+                      type="button"
+                      className={classes.btn2}
+                      onClick={() => {
+                        window.location.reload(false);
+                      }}
+                    >
+                      Reset
+                    </Button>
                   </Box>
                 </Form>
               </div>
@@ -90,14 +121,14 @@ export default function ItemsList({
           </Formik>
         )}
       </Box>
-      <Box mt={3}>
+      <Box mt={3} mb={3}>
         <Grid
           container
           className={classes.root}
           style={{ maxWidth: 1500, margin: '0 auto' }}
         >
           <Grid item xs={12}>
-            <Grid container justify="center" spacing={3}>
+            <Grid container justify="center" spacing={5}>
               {items &&
                 items
                   .filter((i) => {
@@ -120,8 +151,7 @@ export default function ItemsList({
                       case 'Highest-Lowest':
                         return b.price - a.price;
                       default:
-                        return b.itemsInStock - a.itemsInStock
-                        // (a.price - b.price);
+                        return b.itemsInStock - a.itemsInStock;
                     }
                   })
                   .map((item) => (

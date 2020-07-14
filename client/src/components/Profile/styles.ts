@@ -18,5 +18,17 @@ export default makeStyles((theme: Theme) =>
     control: {
       padding: theme.spacing(2),
     },
+    btn: {
+      backgroundColor: "#800095",
+      '&:hover': {
+        backgroundColor: "#800089",
+    }
+    },
+    btn2: {
+      color: "#800095"
+    },
+    step: {
+      color: "#800095"
+    }
   })
 );

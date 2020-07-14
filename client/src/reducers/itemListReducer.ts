@@ -23,7 +23,7 @@ import {
   ItemDetailsState,
   ItemSaveState,
   ItemDeleteActions
-} from '../shared/shared-types';
+} from '../model/itemTypes';
 
 const itemState: ItemAppState = { loading: true, result: [], error: '' };
 

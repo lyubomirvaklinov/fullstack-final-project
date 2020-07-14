@@ -4,13 +4,12 @@ import { TextField } from 'formik-material-ui';
 import { Link, useHistory, useLocation, Redirect } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { loggingAction } from '../../../actions/userActions';
-import {
-  ReduxState,
-  UserActions,
-  LoggingActions,
-} from '../../../shared/shared-types';
+import useStyles from '../../Profile/styles';
+import { ReduxState } from '../../../shared/shared-types';
 import { Formik, Field, Form } from 'formik';
 import { string, object } from 'yup';
+import { persistor } from '../../../store';
+import { LoggingActions } from '../../../model/userType';
 
 interface Props {}
 
@@ -19,6 +18,7 @@ export default function Login({}: Props): ReactElement {
   const [password, setPassword] = useState('');
   const history = useHistory();
   const location = useLocation();
+  const classes = useStyles();
 
   const userLogging: LoggingActions = useSelector(
     (state: ReduxState) => state.userLogging
@@ -26,9 +26,11 @@ export default function Login({}: Props): ReactElement {
   const { userInfo, error, isLoggedIn } = userLogging;
   const dispatch = useDispatch();
   const redirect = location.search ? location.search.split('=')[1] : '/items';
+  console.log(error);
 
   const handleClick = () => {
     dispatch(loggingAction());
+    persistor.purge();
     window.location.reload(false);
   };
 
@@ -80,7 +82,12 @@ export default function Login({}: Props): ReactElement {
             </div>
 
             <Box display="flex" justifyContent="center" margin="25px">
-              <Button className="btn" type="submit">
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.btn}
+              >
                 Log In
               </Button>
             </Box>
@@ -98,7 +105,9 @@ export default function Login({}: Props): ReactElement {
               </Link>
               .
             </p>
-            {error &&  <SnackbarContent message="Invalid Credentials!" action={action} />}
+            {error !== undefined && (
+              <SnackbarContent message="Invalid Credentials!" action={action} />
+            )}
           </Form>
         </Box>
       )}

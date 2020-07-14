@@ -7,7 +7,7 @@ interface Props {
 export default function ImageGrid({image}: Props): ReactElement {
   return (
     <div>
-      <img src={image} width="100%"></img>
+      <img src={image} width="100%" alt=""/>
     </div>
   )
 }

@@ -8,7 +8,7 @@ import {
   REMOVE_ALL_CART_ITEMS
 } from '../const/item-constants';
 
-const addToCart = (id: IdType, qty: number) => async (
+const addToCart = (id: IdType, qty: number, size: string[]) => async (
   dispatch: Dispatch<AppActions>
 ) => {
   try {
@@ -23,7 +23,7 @@ const addToCart = (id: IdType, qty: number) => async (
         price: data.price,
         imageUrl: data.imageUrl,
         category: data.category,
-        size: data.size,
+        size,
         itemsInStock: data.itemsInStock,
         qty,
       },

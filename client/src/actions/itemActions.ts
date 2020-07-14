@@ -17,7 +17,7 @@ import {
 } from '../const/item-constants';
 import axios from 'axios';
 import { Dispatch } from 'redux';
-import { IdType, ReduxState } from '../shared/shared-types';
+import { IdType } from '../shared/shared-types';
 import { SingleItemType } from '../model/items-model';
 import { ITEM_UPDATE_SUCCESS } from '../const/item-constants';
 import {getStateType} from '../shared/shared-types';

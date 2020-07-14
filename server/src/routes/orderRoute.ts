@@ -71,4 +71,10 @@ router.get('/my-orders', auth, async (req: any, res) => {
   res.json(orders);
 });
 
+router.get('/order/:id', auth, async (req: any, res) => {
+  const orderId = req.params.id;
+  const order = await Order.findById(orderId);
+  res.json(order);
+});
+
 export default router;

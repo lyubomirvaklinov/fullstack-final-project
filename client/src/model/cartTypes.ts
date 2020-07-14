@@ -1,4 +1,4 @@
-import { IdType } from './shared-types';
+import { IdType } from '../shared/shared-types';
 
 export interface CartPayload {
   id: IdType;

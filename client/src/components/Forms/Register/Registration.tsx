@@ -1,14 +1,14 @@
 import React, { ReactElement, useState, useEffect } from 'react';
 import { Button, Box, SnackbarContent } from '@material-ui/core';
-import useStyles from '../styles';
 import { Formik, Form, Field } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser, loggingAction } from '../../../actions/userActions';
-import { UserActions, ReduxState } from '../../../shared/shared-types';
+import { ReduxState } from '../../../shared/shared-types';
 import { string, object } from 'yup';
 import { useLocation, Link, useHistory } from 'react-router-dom';
 import { TextField } from 'formik-material-ui';
-
+import { RegisterAndUpdateActions } from '../../../model/userType';
+import useStyles from '../../Profile/styles';
 
 interface Props {}
 
@@ -19,18 +19,16 @@ interface RegUserVals {
 }
 
 export default function Registration({}: Props): ReactElement {
-  const classes = useStyles();
   const [regVals, setRegVals] = useState<RegUserVals>({
     name: '',
     email: '',
     password: '',
   });
-  const userRegister: UserActions = useSelector(
+  const userRegister: RegisterAndUpdateActions = useSelector(
     (state: ReduxState) => state.userRegister
   );
   const { userInfo, success, error } = userRegister;
-
-  // console.log(userInfo);
+  const classes = useStyles();
 
   const history = useHistory();
   const location = useLocation();
@@ -51,7 +49,7 @@ export default function Registration({}: Props): ReactElement {
     if (success) dispatch(loggingAction(regVals.email, regVals.password));
     if (userInfo) history.push(redirect);
     dispatch(registerUser());
-  }, [userInfo]);
+  }, [userInfo, dispatch, history]);
 
   return (
     <Formik
@@ -75,14 +73,6 @@ export default function Registration({}: Props): ReactElement {
               <h1>Register</h1>
             </Box>
             <div>
-              {/* <TextField
-                className={classes.root}
-                placeholder="Enter Username"
-                autoFocus
-                name="name"
-                value={values.name}
-                onChange={handleChange}
-              /> */}
               <Field
                 fullWidth
                 name="name"
@@ -92,13 +82,6 @@ export default function Registration({}: Props): ReactElement {
               />
             </div>
             <div>
-              {/* <TextField
-                className={classes.root}
-                placeholder="Enter Email"
-                name="email"
-                value={values.email}
-                onChange={handleChange}
-              /> */}
               <Field
                 fullWidth
                 name="email"
@@ -108,14 +91,6 @@ export default function Registration({}: Props): ReactElement {
               />
             </div>
             <div>
-              {/* <TextField
-                className={classes.root}
-                placeholder="Enter Password"
-                type="password"
-                name="password"
-                value={values.password}
-                onChange={handleChange}
-              /> */}
               <Field
                 fullWidth
                 name="password"
@@ -125,18 +100,13 @@ export default function Registration({}: Props): ReactElement {
                 onChange={handleChange}
               />
             </div>
-            {/* <div>
-              <TextField
-                className={classes.root}
-                placeholder="Verify Password"
-                type="password"
-                name="verifyPassword"
-                value={values.verifyPassword}
-                onChange={handleChange}
-              />
-            </div> */}
             <Box display="flex" justifyContent="center" margin="25px">
-              <Button className="btn" type="submit">
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.btn}
+                type="submit"
+              >
                 Sign Up
               </Button>
             </Box>
