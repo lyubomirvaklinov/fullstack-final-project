@@ -42,7 +42,6 @@ export default function ProfileForm({}: Props): ReactElement {
   const userUpdate: UserActions = useSelector(
     (state: ReduxState) => state.userUpdate
   );
-  console.log(userUpdate);
 
   const { success } = userUpdate;
   const { userInfo } = userLoggedIn;

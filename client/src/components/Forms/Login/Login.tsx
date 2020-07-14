@@ -26,7 +26,6 @@ export default function Login({}: Props): ReactElement {
   const { userInfo, error, isLoggedIn } = userLogging;
   const dispatch = useDispatch();
   const redirect = location.search ? location.search.split('=')[1] : '/items';
-  console.log(error);
 
   const handleClick = () => {
     dispatch(loggingAction());
